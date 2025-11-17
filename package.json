@@ -2,8 +2,8 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "mail-tm",
   "title": "Mail.tm",
-  "description": "Uses Mail.tm API to generate a temporary email from Raycast.",
-  "icon": "extension-icon.png",
+  "description": "Generate temporary emails using the free Mail.tm API service.",
+  "icon": "extensionicon.png",
   "author": "bakhomious_basta",
   "owner": "codedog",
   "platforms": [
@@ -16,7 +16,7 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "mail-tm",
+      "name": "index",
       "title": "Mail.tm",
       "subtitle": "Temporary Email",
       "description": "Generates a temporary email using Mail.tm API and allows you to check your inbox",
@@ -25,7 +25,8 @@
   ],
   "dependencies": {
     "@raycast/api": "^1.103.6",
-    "@raycast/utils": "^1.17.0"
+    "@raycast/utils": "^1.17.0",
+    "unique-names-generator": "^4.7.1"
   },
   "devDependencies": {
     "@raycast/eslint-config": "^2.0.4",
