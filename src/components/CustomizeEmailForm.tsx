@@ -1,7 +1,8 @@
 import { ActionPanel, Action, Form, showToast, Toast, Clipboard, useNavigation } from "@raycast/api";
 import { useState, useEffect } from "react";
-import { generateEmail, getAvailableDomains, GenerateEmailOptions } from "../api";
+import { generateEmail, getAvailableDomains} from "../api";
 import { saveEmail } from "../storage";
+import { GenerateEmailOptions } from "../types";
 
 export function CustomizeEmailForm() {
   const [domains, setDomains] = useState<string[]>([]);

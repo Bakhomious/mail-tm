@@ -55,3 +55,25 @@ export interface MessagesResponse {
   "hydra:member": Message[];
   "hydra:totalItems": number;
 }
+
+export interface AccountResponse {
+  id: string;
+  address: string;
+  quota: number;
+  used: number;
+  isDisabled: boolean;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TokenResponse {
+  token: string;
+  id: string;
+}
+
+export interface GenerateEmailOptions {
+  customAddress?: string;
+  customPassword?: string;
+  customDomain?: string;
+}

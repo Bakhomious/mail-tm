@@ -12,6 +12,7 @@ interface MailboxViewProps {
 export function MailboxView({ email }: MailboxViewProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
 
   async function loadMessages() {

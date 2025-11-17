@@ -1,34 +1,10 @@
-import { ActionPanel, Action, List, showToast, Toast, Icon, Color, Clipboard, useNavigation } from "@raycast/api";
-import { generateEmail } from "./api";
-import { saveEmail } from "./storage";
+import { ActionPanel, Action, List, Icon, Color, useNavigation } from "@raycast/api";
 import { EmailListView } from "./components/EmailListView";
 import { CustomizeEmailForm } from "./components/CustomizeEmailForm";
+import { handleQuickGenerate } from "./actions/emailActions";
 
 export default function Command() {
   const { push } = useNavigation();
-
-  async function handleQuickGenerate() {
-    const toast = await showToast({
-      style: Toast.Style.Animated,
-      title: "Generating..."
-    });
-
-    try {
-      const email = await generateEmail();
-      await saveEmail(email);
-
-      toast.style = Toast.Style.Success;
-      toast.title = "Done!";
-      toast.message = email.address;
-
-      await Clipboard.copy(email.address);
-    } catch (error) {
-      console.error(error);
-      toast.style = Toast.Style.Failure;
-      toast.title = "Failed to generate email";
-      toast.message = error instanceof Error ? error.message : "Unexpected error occurred";
-    }
-  }
 
   function handleViewEmails() {
     push(<EmailListView />);

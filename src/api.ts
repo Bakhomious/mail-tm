@@ -1,14 +1,6 @@
 import { uniqueNamesGenerator, adjectives, colors, animals } from "unique-names-generator";
-import { DomainsResponse, TempEmail, MessagesResponse, MessageDetail } from "./types";
-
-const API = "https://api.mail.tm";
-const EXPIRATION_DAYS = 7;
-
-export interface GenerateEmailOptions {
-  customAddress?: string;
-  customPassword?: string;
-  customDomain?: string;
-}
+import { DomainsResponse, TempEmail, MessagesResponse, MessageDetail, AccountResponse, TokenResponse, GenerateEmailOptions } from "./types";
+import { API, EXPIRATION_DAYS } from "./constants";
 
 export async function getAvailableDomains(): Promise<string[]> {
   const domainsResponse = await fetch(`${API}/domains`);
@@ -53,7 +45,7 @@ export async function generateEmail(options?: GenerateEmailOptions): Promise<Tem
     throw new Error("Failed to create account");
   }
 
-  const accountData = await accountResponse.json();
+  const accountData = await accountResponse.json() as AccountResponse;
   const accountId = accountData.id;
 
   const tokenResponse = await fetch(`${API}/token`, {
@@ -66,7 +58,7 @@ export async function generateEmail(options?: GenerateEmailOptions): Promise<Tem
     throw new Error("Failed to get authentication token");
   }
 
-  const tokenData = await tokenResponse.json();
+  const tokenData = await tokenResponse.json() as TokenResponse;
   const token = tokenData.token;
 
   const createdAt = Date.now();
