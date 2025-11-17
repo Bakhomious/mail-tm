@@ -1,9 +1,9 @@
-import { List, showToast, Toast, Icon } from "@raycast/api";
+import { List, showToast, Toast, Icon, ActionPanel, Action, useNavigation } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { getMessages } from "../api";
 import { TempEmail, Message } from "../types";
 import { formatMessageDate } from "../utils/formatters";
-import { MessageActionsPanel, MessageDetailContent } from "./MessageDetailContent";
+import { MessageView } from "./MessageView";
 
 interface MailboxViewProps {
   email: TempEmail;
@@ -12,8 +12,7 @@ interface MailboxViewProps {
 export function MailboxView({ email }: MailboxViewProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
+  const { push } = useNavigation();
 
   async function loadMessages() {
     setIsLoading(true);
@@ -40,10 +39,6 @@ export function MailboxView({ email }: MailboxViewProps) {
     <List
       isLoading={isLoading}
       navigationTitle={email.address}
-      isShowingDetail={messages.length > 0}
-      onSelectionChange={(id) => {
-        if (id) setSelectedMessageId(id);
-      }}
     >
       {messages.length === 0 ? (
         <List.EmptyView
@@ -62,11 +57,20 @@ export function MailboxView({ email }: MailboxViewProps) {
               { text: formatMessageDate(message.createdAt) },
               ...(!message.seen ? [{ icon: Icon.Circle, tooltip: "Unread" }] : [])
             ]}
-            detail={
-              <MessageDetailContent messageId={message.id} token={email.token} message={message} />
-            }
             actions={
-              <MessageActionsPanel message={message} token={email.token} onRefresh={loadMessages} />
+              <ActionPanel>
+                <Action
+                  title="View Message"
+                  icon={Icon.Eye}
+                  onAction={() => push(<MessageView messageId={message.id} token={email.token} />)}
+                />
+                <Action
+                  title="Refresh"
+                  icon={Icon.ArrowClockwise}
+                  onAction={loadMessages}
+                  shortcut={{ modifiers: ["cmd"], key: "r" }}
+                />
+              </ActionPanel>
             }
           />
         ))

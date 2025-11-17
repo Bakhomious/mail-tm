@@ -20,7 +20,7 @@ export async function generateEmail(options?: GenerateEmailOptions): Promise<Tem
   } else {
     const randomUsername = uniqueNamesGenerator({
       dictionaries: [adjectives, colors, animals],
-      separator: '-',
+      separator: '',
       length: 3,
       style: 'lowerCase'
     });
@@ -115,4 +115,19 @@ export async function getMessageDetail(messageId: string, token: string): Promis
   }
 
   return await response.json() as MessageDetail;
+}
+
+export async function markMessageAsSeen(messageId: string, token: string): Promise<void> {
+  const response = await fetch(`${API}/messages/${messageId}`, {
+    method: "PATCH",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/merge-patch+json"
+    },
+    body: JSON.stringify({ seen: true })
+  });
+
+  if (!response.ok && response.status !== 404) {
+    console.error("Failed to mark message as seen");
+  }
 }

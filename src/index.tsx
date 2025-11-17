@@ -23,6 +23,11 @@ export default function Command() {
         actions={
           <ActionPanel>
             <Action title="Generate" onAction={handleQuickGenerate} />
+            <Action.OpenInBrowser
+              title="Visit Mail.tm"
+              url="https://mail.tm"
+              shortcut={{ modifiers: ["cmd"], key: "o" }}
+            />
           </ActionPanel>
         }
       />
@@ -33,6 +38,11 @@ export default function Command() {
         actions={
           <ActionPanel>
             <Action title="Customize" onAction={handleCustomize} />
+            <Action.OpenInBrowser
+              title="Visit Mail.tm"
+              url="https://mail.tm"
+              shortcut={{ modifiers: ["cmd"], key: "o" }}
+            />
           </ActionPanel>
         }
       />
@@ -43,6 +53,11 @@ export default function Command() {
         actions={
           <ActionPanel>
             <Action title="View" onAction={handleViewEmails} />
+            <Action.OpenInBrowser
+              title="Visit Mail.tm"
+              url="https://mail.tm"
+              shortcut={{ modifiers: ["cmd"], key: "o" }}
+            />
           </ActionPanel>
         }
       />
