@@ -15,6 +15,7 @@ import { getEmails, deleteEmail, clearExpiredEmails } from "../storage";
 import { TempEmail } from "../types";
 import { formatExpiryDate } from "../utils/formatters";
 import { MailboxView } from "./MailboxView";
+import { TOAST_MESSAGES, ERROR_MESSAGES, UI_STRINGS } from "../constants";
 
 export function EmailListView() {
   const [emails, setEmails] = useState<TempEmail[]>([]);
@@ -35,10 +36,10 @@ export function EmailListView() {
 
   async function handleDelete(email: TempEmail) {
     const confirmed = await confirmAlert({
-      title: "Delete Email",
-      message: `Are you sure you want to delete ${email.address}?`,
+      title: UI_STRINGS.DELETE_EMAIL_TITLE,
+      message: UI_STRINGS.DELETE_EMAIL_MESSAGE(email.address),
       primaryAction: {
-        title: "Delete",
+        title: UI_STRINGS.DELETE_ACTION,
         style: Alert.ActionStyle.Destructive,
       },
     });
@@ -46,7 +47,7 @@ export function EmailListView() {
     if (confirmed) {
       const toast = await showToast({
         style: Toast.Style.Animated,
-        title: "Deleting...",
+        title: TOAST_MESSAGES.DELETING,
       });
 
       try {
@@ -55,12 +56,12 @@ export function EmailListView() {
         await loadEmails();
 
         toast.style = Toast.Style.Success;
-        toast.title = "Email deleted";
+        toast.title = TOAST_MESSAGES.EMAIL_DELETED;
       } catch (error) {
         console.error(error);
         toast.style = Toast.Style.Failure;
-        toast.title = "Failed to delete";
-        toast.message = error instanceof Error ? error.message : "Unexpected error occurred";
+        toast.title = ERROR_MESSAGES.EMAIL_DELETE_FAILED;
+        toast.message = error instanceof Error ? error.message : ERROR_MESSAGES.STANDARD_ERROR_MESSAGE;
       }
     }
   }
@@ -69,8 +70,8 @@ export function EmailListView() {
     <List isLoading={isLoading}>
       {emails.length === 0 ? (
         <List.EmptyView
-          title="No saved emails"
-          description="Generate a temporary email to get started"
+          title={UI_STRINGS.NO_SAVED_EMAILS_TITLE}
+          description={UI_STRINGS.NO_SAVED_EMAILS_DESCRIPTION}
           icon={Icon.Envelope}
         />
       ) : (
@@ -85,38 +86,38 @@ export function EmailListView() {
               actions={
                 <ActionPanel>
                   <Action
-                    title="View Mailbox"
+                    title={UI_STRINGS.VIEW_MAILBOX}
                     icon={Icon.Envelope}
                     onAction={() => push(<MailboxView email={email} />)}
                   />
-                  <ActionPanel.Section title="Copy">
+                  <ActionPanel.Section title={UI_STRINGS.COPY_SECTION_TITLE}>
                     <Action.CopyToClipboard
-                      title="Copy Email"
+                      title={UI_STRINGS.COPY_EMAIL}
                       content={email.address}
                       shortcut={{ modifiers: ["cmd"], key: "c" }}
                     />
                     <Action.CopyToClipboard
-                      title="Copy Password"
+                      title={UI_STRINGS.COPY_PASSWORD}
                       content={email.password}
                       shortcut={{ modifiers: ["cmd", "shift"], key: "c" }}
                       onCopy={async () => {
                         await showToast({
                           style: Toast.Style.Success,
-                          title: "Password copied",
-                          message: "Sensitive information copied to clipboard"
+                          title: UI_STRINGS.PASSWORD_COPIED_TITLE,
+                          message: UI_STRINGS.PASSWORD_COPIED_MESSAGE
                         });
                       }}
                     />
                   </ActionPanel.Section>
                   <ActionPanel.Section>
                     <Action
-                      title="Refresh"
+                      title={UI_STRINGS.REFRESH}
                       icon={Icon.ArrowClockwise}
                       onAction={loadEmails}
                       shortcut={{ modifiers: ["cmd"], key: "r" }}
                     />
                     <Action
-                      title="Delete Email"
+                      title={UI_STRINGS.DELETE_EMAIL}
                       icon={Icon.Trash}
                       style={Action.Style.Destructive}
                       onAction={() => handleDelete(email)}

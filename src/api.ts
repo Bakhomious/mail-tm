@@ -1,18 +1,26 @@
 import { uniqueNamesGenerator, adjectives, colors, animals } from "unique-names-generator";
 import { DomainsResponse, TempEmail, MessagesResponse, MessageDetail, AccountResponse, TokenResponse, GenerateEmailOptions } from "./types";
-import { API, EXPIRATION_DAYS } from "./constants";
+import {
+  API,
+  EXPIRATION_DAYS,
+  HTTP_STATUS,
+  HTTP_HEADERS,
+  ERROR_MESSAGES,
+  API_RESPONSE,
+  TIME
+} from "./constants";
 
 export async function getAvailableDomains(): Promise<string[]> {
   const domainsResponse = await fetch(`${API}/domains`);
   const domains: DomainsResponse = await domainsResponse.json() as DomainsResponse;
-  return domains["hydra:member"].map(d => d.domain);
+  return domains[API_RESPONSE.HYDRA_MEMBER].map(d => d.domain);
 }
 
 export async function generateEmail(options?: GenerateEmailOptions): Promise<TempEmail> {
   const domainsResponse = await fetch(`${API}/domains`);
   const domains: DomainsResponse = await domainsResponse.json() as DomainsResponse;
 
-  const domain = options?.customDomain || domains["hydra:member"][0].domain;
+  const domain = options?.customDomain || domains[API_RESPONSE.HYDRA_MEMBER][0].domain;
 
   let address: string;
   if (options?.customAddress) {
@@ -31,18 +39,18 @@ export async function generateEmail(options?: GenerateEmailOptions): Promise<Tem
 
   const accountResponse = await fetch(`${API}/accounts`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": HTTP_HEADERS.CONTENT_TYPE_JSON },
     body: JSON.stringify({ address, password })
   });
 
   if (!accountResponse.ok) {
     console.log(accountResponse);
 
-    if (accountResponse.status === 429) {
-      throw new Error("Too many requests. Please try again later.");
+    if (accountResponse.status === HTTP_STATUS.TOO_MANY_REQUESTS) {
+      throw new Error(ERROR_MESSAGES.RATE_LIMIT);
     }
 
-    throw new Error("Failed to create account");
+    throw new Error(ERROR_MESSAGES.ACCOUNT_CREATE_FAILED);
   }
 
   const accountData = await accountResponse.json() as AccountResponse;
@@ -50,19 +58,19 @@ export async function generateEmail(options?: GenerateEmailOptions): Promise<Tem
 
   const tokenResponse = await fetch(`${API}/token`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": HTTP_HEADERS.CONTENT_TYPE_JSON },
     body: JSON.stringify({ address, password })
   });
 
   if (!tokenResponse.ok) {
-    throw new Error("Failed to get authentication token");
+    throw new Error(ERROR_MESSAGES.TOKEN_FAILED);
   }
 
   const tokenData = await tokenResponse.json() as TokenResponse;
   const token = tokenData.token;
 
   const createdAt = Date.now();
-  const expiresAt = createdAt + (EXPIRATION_DAYS * 24 * 60 * 60 * 1000);
+  const expiresAt = createdAt + (EXPIRATION_DAYS * TIME.MILLISECONDS_IN_DAY);
   const id = `${address}-${createdAt}`;
 
   return { id, address, password, token, accountId, createdAt, expiresAt };
@@ -72,12 +80,12 @@ export async function deleteEmailFromAPI(accountId: string, token: string): Prom
   const response = await fetch(`${API}/accounts/${accountId}`, {
     method: "DELETE",
     headers: {
-      "Authorization": `Bearer ${token}`
+      "Authorization": `${HTTP_HEADERS.AUTHORIZATION_BEARER_PREFIX} ${token}`
     }
   });
 
-  if (!response.ok && response.status !== 404) {
-    throw new Error("Failed to delete account from API");
+  if (!response.ok && response.status !== HTTP_STATUS.NOT_FOUND) {
+    throw new Error(ERROR_MESSAGES.ACCOUNT_DELETE_FAILED);
   }
 }
 
@@ -85,15 +93,15 @@ export async function getMessages(token: string): Promise<MessagesResponse> {
   const response = await fetch(`${API}/messages?page=1`, {
     method: "GET",
     headers: {
-      "Authorization": `Bearer ${token}`
+      "Authorization": `${HTTP_HEADERS.AUTHORIZATION_BEARER_PREFIX} ${token}`
     }
   });
 
   if (!response.ok) {
-    if (response.status === 429) {
-      throw new Error("Too many requests. Please try again later.");
+    if (response.status === HTTP_STATUS.TOO_MANY_REQUESTS) {
+      throw new Error(ERROR_MESSAGES.RATE_LIMIT);
     }
-    throw new Error("Failed to fetch messages");
+    throw new Error(ERROR_MESSAGES.MESSAGES_FETCH_FAILED);
   }
 
   return await response.json() as MessagesResponse;
@@ -103,15 +111,15 @@ export async function getMessageDetail(messageId: string, token: string): Promis
   const response = await fetch(`${API}/messages/${messageId}`, {
     method: "GET",
     headers: {
-      "Authorization": `Bearer ${token}`
+      "Authorization": `${HTTP_HEADERS.AUTHORIZATION_BEARER_PREFIX} ${token}`
     }
   });
 
   if (!response.ok) {
-    if (response.status === 429) {
-      throw new Error("Too many requests. Please try again later.");
+    if (response.status === HTTP_STATUS.TOO_MANY_REQUESTS) {
+      throw new Error(ERROR_MESSAGES.RATE_LIMIT);
     }
-    throw new Error("Failed to fetch message details");
+    throw new Error(ERROR_MESSAGES.MESSAGE_DETAILS_FAILED);
   }
 
   return await response.json() as MessageDetail;
@@ -121,13 +129,13 @@ export async function markMessageAsSeen(messageId: string, token: string): Promi
   const response = await fetch(`${API}/messages/${messageId}`, {
     method: "PATCH",
     headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/merge-patch+json"
+      "Authorization": `${HTTP_HEADERS.AUTHORIZATION_BEARER_PREFIX} ${token}`,
+      "Content-Type": HTTP_HEADERS.CONTENT_TYPE_MERGE_PATCH
     },
     body: JSON.stringify({ seen: true })
   });
 
-  if (!response.ok && response.status !== 404) {
+  if (!response.ok && response.status !== HTTP_STATUS.NOT_FOUND) {
     console.error("Failed to mark message as seen");
   }
 }

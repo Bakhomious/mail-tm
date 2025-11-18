@@ -2,6 +2,7 @@ import { ActionPanel, Action, List, Icon, Color, useNavigation } from "@raycast/
 import { EmailListView } from "./components/EmailListView";
 import { CustomizeEmailForm } from "./components/CustomizeEmailForm";
 import { handleQuickGenerate } from "./actions/emailActions";
+import { UI_STRINGS, URLS } from "./constants";
 
 export default function Command() {
   const { push } = useNavigation();
@@ -17,45 +18,45 @@ export default function Command() {
   return (
     <List>
       <List.Item
-        title="Quick Generate"
-        subtitle="Generate a random temporary email instantly"
+        title={UI_STRINGS.QUICK_GENERATE_TITLE}
+        subtitle={UI_STRINGS.QUICK_GENERATE_DESCRIPTION}
         icon={{ source: Icon.Bolt, tintColor: Color.Yellow }}
         actions={
           <ActionPanel>
-            <Action title="Generate" onAction={handleQuickGenerate} />
+            <Action title={UI_STRINGS.GENERATE} onAction={handleQuickGenerate} />
             <Action.OpenInBrowser
-              title="Visit Mail.tm"
-              url="https://mail.tm"
+              title={UI_STRINGS.VISIT_MAIL_TM}
+              url={URLS.MAIL_TM}
               shortcut={{ modifiers: ["cmd"], key: "o" }}
             />
           </ActionPanel>
         }
       />
       <List.Item
-        title="Customize Email"
-        subtitle="Create an email with custom address and password"
+        title={UI_STRINGS.CUSTOMIZE_EMAIL_TITLE}
+        subtitle={UI_STRINGS.CUSTOMIZE_EMAIL_DESCRIPTION}
         icon={{ source: Icon.Pencil, tintColor: Color.Blue }}
         actions={
           <ActionPanel>
-            <Action title="Customize" onAction={handleCustomize} />
+            <Action title={UI_STRINGS.CUSTOMIZE} onAction={handleCustomize} />
             <Action.OpenInBrowser
-              title="Visit Mail.tm"
-              url="https://mail.tm"
+              title={UI_STRINGS.VISIT_MAIL_TM}
+              url={URLS.MAIL_TM}
               shortcut={{ modifiers: ["cmd"], key: "o" }}
             />
           </ActionPanel>
         }
       />
       <List.Item
-        title="View Saved Emails"
-        subtitle="Manage your temporary emails"
+        title={UI_STRINGS.VIEW_SAVED_EMAILS_TITLE}
+        subtitle={UI_STRINGS.VIEW_SAVED_EMAILS_DESCRIPTION}
         icon={{ source: Icon.Envelope, tintColor: Color.Green }}
         actions={
           <ActionPanel>
-            <Action title="View" onAction={handleViewEmails} />
+            <Action title={UI_STRINGS.VIEW} onAction={handleViewEmails} />
             <Action.OpenInBrowser
-              title="Visit Mail.tm"
-              url="https://mail.tm"
+              title={UI_STRINGS.VISIT_MAIL_TM}
+              url={URLS.MAIL_TM}
               shortcut={{ modifiers: ["cmd"], key: "o" }}
             />
           </ActionPanel>

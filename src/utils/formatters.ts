@@ -1,22 +1,24 @@
+import { TIME, UI_STRINGS } from "../constants";
+
 export function formatExpiryDate(expiresAt: number): string {
-  const days = Math.floor((expiresAt - Date.now()) / (1000 * 60 * 60 * 24));
-  if (days === 0) return "Expires today";
-  if (days === 1) return "Expires tomorrow";
-  return `Expires in ${days} days`;
+  const days = Math.floor((expiresAt - Date.now()) / TIME.MILLISECONDS_IN_DAY);
+  if (days === 0) return UI_STRINGS.EXPIRES_TODAY;
+  if (days === 1) return UI_STRINGS.EXPIRES_TOMORROW;
+  return UI_STRINGS.EXPIRES_IN_DAYS(days);
 }
 
 export function formatMessageDate(dateString: string): string {
   const date = new Date(dateString);
   const now = new Date();
-  const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
+  const diffInHours = (now.getTime() - date.getTime()) / TIME.MILLISECONDS_IN_HOUR;
 
-  if (diffInHours < 1) {
+  if (diffInHours < TIME.HOUR_THRESHOLD) {
     const minutes = Math.floor(diffInHours * 60);
-    return `${minutes}m ago`;
-  } else if (diffInHours < 24) {
-    return `${Math.floor(diffInHours)}h ago`;
-  } else if (diffInHours < 48) {
-    return "Yesterday";
+    return UI_STRINGS.MINUTES_AGO(minutes);
+  } else if (diffInHours < TIME.DAY_THRESHOLD) {
+    return UI_STRINGS.HOURS_AGO(Math.floor(diffInHours));
+  } else if (diffInHours < TIME.TWO_DAY_THRESHOLD) {
+    return UI_STRINGS.YESTERDAY;
   } else {
     return date.toLocaleDateString();
   }

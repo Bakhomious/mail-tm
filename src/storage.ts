@@ -1,7 +1,8 @@
 import { LocalStorage } from "@raycast/api";
 import { TempEmail } from "./types";
+import { STORAGE_KEYS } from "./constants";
 
-const STORAGE_KEY = "temp-emails";
+const STORAGE_KEY = STORAGE_KEYS.TEMP_EMAILS;
 
 export async function saveEmail(email: TempEmail): Promise<void> {
   const emails = await getEmails();

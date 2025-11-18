@@ -4,13 +4,14 @@ import TurndownService from "turndown";
 import { getMessageDetail, markMessageAsSeen } from "../api";
 import { MessageDetail } from "../types";
 import { formatFullDate } from "../utils/formatters";
+import { ERROR_MESSAGES, UI_STRINGS, HTML_CONVERTER_CONFIG } from "../constants";
 
 const turndownService = new TurndownService({
-  headingStyle: 'atx',
-  codeBlockStyle: 'fenced',
+  headingStyle: HTML_CONVERTER_CONFIG.HEADING_STYLE,
+  codeBlockStyle: HTML_CONVERTER_CONFIG.CODE_BLOCK_STYLE,
 });
 
-turndownService.remove(['style', 'script', 'noscript', 'iframe']);
+turndownService.remove(HTML_CONVERTER_CONFIG.TAGS_TO_REMOVE);
 
 interface MessageViewProps {
   messageId: string;
@@ -34,8 +35,8 @@ export function MessageView({ messageId, token }: MessageViewProps) {
       console.error(error);
       await showToast({
         style: Toast.Style.Failure,
-        title: "Failed to load message",
-        message: error instanceof Error ? error.message : "Unexpected error occurred"
+        title: ERROR_MESSAGES.MESSAGE_LOAD_FAILED,
+        message: error instanceof Error ? error.message : ERROR_MESSAGES.STANDARD_ERROR_MESSAGE
       });
     } finally {
       setIsLoading(false);
@@ -52,10 +53,10 @@ export function MessageView({ messageId, token }: MessageViewProps) {
 
   const bodyContent = messageDetail.html && messageDetail.html.length > 0
     ? turndownService.turndown(messageDetail.html.join('\n'))
-    : messageDetail.text || "No content";
+    : messageDetail.text || UI_STRINGS.NO_CONTENT;
 
   const markdown = [
-    `# ${messageDetail.subject || "(No Subject)"}`,
+    `# ${messageDetail.subject || UI_STRINGS.NO_SUBJECT}`,
     '',
     bodyContent
   ].join('\n');
@@ -63,33 +64,33 @@ export function MessageView({ messageId, token }: MessageViewProps) {
   return (
     <Detail
       markdown={markdown}
-      navigationTitle={messageDetail.subject || "(No Subject)"}
+      navigationTitle={messageDetail.subject || UI_STRINGS.NO_SUBJECT}
       metadata={
         <Detail.Metadata>
           <Detail.Metadata.Label
-            title="From"
+            title={UI_STRINGS.METADATA_FROM}
             text={messageDetail.from.name || messageDetail.from.address}
           />
           <Detail.Metadata.Label
-            title="Email"
+            title={UI_STRINGS.METADATA_EMAIL}
             text={messageDetail.from.address}
           />
           <Detail.Metadata.Separator />
           <Detail.Metadata.Label
-            title="To"
+            title={UI_STRINGS.METADATA_TO}
             text={messageDetail.to.map(t => t.address).join(", ")}
           />
           <Detail.Metadata.Separator />
           <Detail.Metadata.Label
-            title="Date"
+            title={UI_STRINGS.METADATA_DATE}
             text={formatFullDate(messageDetail.createdAt)}
           />
           {messageDetail.hasAttachments && (
             <>
               <Detail.Metadata.Separator />
               <Detail.Metadata.Label
-                title="Attachments"
-                text={`${messageDetail.attachments?.length || 0} file(s)`}
+                title={UI_STRINGS.METADATA_ATTACHMENTS}
+                text={UI_STRINGS.METADATA_FILES(messageDetail.attachments?.length || 0)}
               />
             </>
           )}
@@ -98,12 +99,12 @@ export function MessageView({ messageId, token }: MessageViewProps) {
       actions={
         <ActionPanel>
           <Action.CopyToClipboard
-            title="Copy Full Email Content"
+            title={UI_STRINGS.COPY_FULL_EMAIL_CONTENT}
             content={bodyContent}
             shortcut={{ modifiers: ["cmd", "shift"], key: "e" }}
           />
           <Action.CopyToClipboard
-            title="Copy Sender Email"
+            title={UI_STRINGS.COPY_SENDER_EMAIL}
             content={messageDetail.from.address}
             shortcut={{ modifiers: ["cmd", "shift"], key: "c" }}
           />
