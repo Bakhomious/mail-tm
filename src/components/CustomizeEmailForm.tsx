@@ -19,7 +19,7 @@ export function CustomizeEmailForm() {
         console.error(error);
         await showToast({
           style: Toast.Style.Failure,
-          title: ERROR_MESSAGES.DOMAINS_FETCH_FAILED
+          title: ERROR_MESSAGES.DOMAINS_FETCH_FAILED,
         });
       } finally {
         setIsLoading(false);
@@ -31,7 +31,7 @@ export function CustomizeEmailForm() {
   async function handleSubmit(values: { customAddress: string; customPassword: string; customDomain?: string }) {
     const toast = await showToast({
       style: Toast.Style.Animated,
-      title: TOAST_MESSAGES.GENERATING
+      title: TOAST_MESSAGES.GENERATING,
     });
 
     try {
@@ -89,7 +89,7 @@ export function CustomizeEmailForm() {
       />
       {domains.length > 1 ? (
         <Form.Dropdown id="customDomain" title={UI_STRINGS.DOMAIN_LABEL} defaultValue={domains[0]}>
-          {domains.map(domain => (
+          {domains.map((domain) => (
             <Form.Dropdown.Item key={domain} value={domain} title={domain} />
           ))}
         </Form.Dropdown>

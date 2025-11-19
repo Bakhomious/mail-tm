@@ -13,7 +13,7 @@ export interface Domain {
 }
 
 export interface DomainsResponse {
-  "hydra:member": Domain[]
+  "hydra:member": Domain[];
 }
 
 export interface MessageFrom {

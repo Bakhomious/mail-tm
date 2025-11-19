@@ -36,7 +36,7 @@ export function MessageView({ messageId, token }: MessageViewProps) {
       await showToast({
         style: Toast.Style.Failure,
         title: ERROR_MESSAGES.MESSAGE_LOAD_FAILED,
-        message: error instanceof Error ? error.message : ERROR_MESSAGES.STANDARD_ERROR_MESSAGE
+        message: error instanceof Error ? error.message : ERROR_MESSAGES.STANDARD_ERROR_MESSAGE,
       });
     } finally {
       setIsLoading(false);
@@ -51,15 +51,12 @@ export function MessageView({ messageId, token }: MessageViewProps) {
     return <Detail isLoading={true} />;
   }
 
-  const bodyContent = messageDetail.html && messageDetail.html.length > 0
-    ? turndownService.turndown(messageDetail.html.join('\n'))
-    : messageDetail.text || UI_STRINGS.NO_CONTENT;
+  const bodyContent =
+    messageDetail.html && messageDetail.html.length > 0
+      ? turndownService.turndown(messageDetail.html.join("\n"))
+      : messageDetail.text || UI_STRINGS.NO_CONTENT;
 
-  const markdown = [
-    `# ${messageDetail.subject || UI_STRINGS.NO_SUBJECT}`,
-    '',
-    bodyContent
-  ].join('\n');
+  const markdown = [`# ${messageDetail.subject || UI_STRINGS.NO_SUBJECT}`, "", bodyContent].join("\n");
 
   return (
     <Detail
@@ -71,20 +68,14 @@ export function MessageView({ messageId, token }: MessageViewProps) {
             title={UI_STRINGS.METADATA_FROM}
             text={messageDetail.from.name || messageDetail.from.address}
           />
-          <Detail.Metadata.Label
-            title={UI_STRINGS.METADATA_EMAIL}
-            text={messageDetail.from.address}
-          />
+          <Detail.Metadata.Label title={UI_STRINGS.METADATA_EMAIL} text={messageDetail.from.address} />
           <Detail.Metadata.Separator />
           <Detail.Metadata.Label
             title={UI_STRINGS.METADATA_TO}
-            text={messageDetail.to.map(t => t.address).join(", ")}
+            text={messageDetail.to.map((t) => t.address).join(", ")}
           />
           <Detail.Metadata.Separator />
-          <Detail.Metadata.Label
-            title={UI_STRINGS.METADATA_DATE}
-            text={formatFullDate(messageDetail.createdAt)}
-          />
+          <Detail.Metadata.Label title={UI_STRINGS.METADATA_DATE} text={formatFullDate(messageDetail.createdAt)} />
           {messageDetail.hasAttachments && (
             <>
               <Detail.Metadata.Separator />

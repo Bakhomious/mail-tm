@@ -5,7 +5,6 @@
   "description": "Generate temporary emails using the free Mail.tm API service.",
   "icon": "extensionicon.png",
   "author": "bakhomious_basta",
-  "owner": "codedog",
   "platforms": [
     "macOS",
     "Windows"

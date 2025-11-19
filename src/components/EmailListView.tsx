@@ -1,14 +1,4 @@
-import {
-  ActionPanel,
-  Action,
-  List,
-  showToast,
-  Toast,
-  Icon,
-  Alert,
-  confirmAlert,
-  useNavigation
-} from "@raycast/api";
+import { ActionPanel, Action, List, showToast, Toast, Icon, Alert, confirmAlert, useNavigation } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { deleteEmailFromAPI } from "../api";
 import { getEmails, deleteEmail, clearExpiredEmails } from "../storage";
@@ -80,9 +70,7 @@ export function EmailListView() {
             <List.Item
               key={email.id}
               title={email.address}
-              accessories={[
-                { text: formatExpiryDate(email.expiresAt) }
-              ]}
+              accessories={[{ text: formatExpiryDate(email.expiresAt) }]}
               actions={
                 <ActionPanel>
                   <Action
@@ -104,7 +92,7 @@ export function EmailListView() {
                         await showToast({
                           style: Toast.Style.Success,
                           title: UI_STRINGS.PASSWORD_COPIED_TITLE,
-                          message: UI_STRINGS.PASSWORD_COPIED_MESSAGE
+                          message: UI_STRINGS.PASSWORD_COPIED_MESSAGE,
                         });
                       }}
                     />

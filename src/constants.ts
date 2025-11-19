@@ -136,7 +136,7 @@ export const URLS = {
 } as const;
 
 export const HTML_CONVERTER_CONFIG = {
-  HEADING_STYLE: 'atx' as const,
-  CODE_BLOCK_STYLE: 'fenced' as const,
-  TAGS_TO_REMOVE: ['style', 'script', 'noscript', 'iframe'] as string[],
+  HEADING_STYLE: "atx" as const,
+  CODE_BLOCK_STYLE: "fenced" as const,
+  TAGS_TO_REMOVE: ["style", "script", "noscript", "iframe"] as string[],
 } as const;

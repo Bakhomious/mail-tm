@@ -7,7 +7,7 @@ import { TOAST_MESSAGES, ERROR_MESSAGES } from "../constants";
 export async function handleQuickGenerate(): Promise<void> {
   const toast = await showToast({
     style: Toast.Style.Animated,
-    title: TOAST_MESSAGES.GENERATING
+    title: TOAST_MESSAGES.GENERATING,
   });
 
   try {
@@ -30,7 +30,7 @@ export async function handleQuickGenerate(): Promise<void> {
 export async function handleCustomGenerate(options: GenerateEmailOptions): Promise<void> {
   const toast = await showToast({
     style: Toast.Style.Animated,
-    title: TOAST_MESSAGES.GENERATING
+    title: TOAST_MESSAGES.GENERATING,
   });
 
   try {

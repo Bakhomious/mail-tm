@@ -16,7 +16,7 @@ export async function getEmails(): Promise<TempEmail[]> {
 
   const emails: TempEmail[] = JSON.parse(stored);
   const now = Date.now();
-  const validEmails = emails.filter(email => email.expiresAt > now);
+  const validEmails = emails.filter((email) => email.expiresAt > now);
 
   if (validEmails.length !== emails.length) {
     await LocalStorage.setItem(STORAGE_KEY, JSON.stringify(validEmails));
@@ -27,7 +27,7 @@ export async function getEmails(): Promise<TempEmail[]> {
 
 export async function deleteEmail(id: string): Promise<void> {
   const emails = await getEmails();
-  const filtered = emails.filter(email => email.id !== id);
+  const filtered = emails.filter((email) => email.id !== id);
   await LocalStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
 }
 

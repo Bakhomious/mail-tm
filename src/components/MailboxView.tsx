@@ -25,7 +25,7 @@ export function MailboxView({ email }: MailboxViewProps) {
       await showToast({
         style: Toast.Style.Failure,
         title: ERROR_MESSAGES.MESSAGES_LOAD_FAILED,
-        message: error instanceof Error ? error.message : ERROR_MESSAGES.STANDARD_ERROR_MESSAGE
+        message: error instanceof Error ? error.message : ERROR_MESSAGES.STANDARD_ERROR_MESSAGE,
       });
     } finally {
       setIsLoading(false);
@@ -37,10 +37,7 @@ export function MailboxView({ email }: MailboxViewProps) {
   }, []);
 
   return (
-    <List
-      isLoading={isLoading}
-      navigationTitle={email.address}
-    >
+    <List isLoading={isLoading} navigationTitle={email.address}>
       {messages.length === 0 ? (
         <List.EmptyView
           title={UI_STRINGS.NO_MESSAGES_TITLE}
@@ -56,7 +53,7 @@ export function MailboxView({ email }: MailboxViewProps) {
             subtitle={message.from.address}
             accessories={[
               { text: formatMessageDate(message.createdAt) },
-              ...(!message.seen ? [{ icon: Icon.Circle, tooltip: UI_STRINGS.UNREAD_TOOLTIP }] : [])
+              ...(!message.seen ? [{ icon: Icon.Circle, tooltip: UI_STRINGS.UNREAD_TOOLTIP }] : []),
             ]}
             actions={
               <ActionPanel>
