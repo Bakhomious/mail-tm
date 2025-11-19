@@ -1,5 +1,5 @@
 export const API = "https://api.mail.tm";
-export const EXPIRATION_DAYS = 7;
+export const EXPIRATION_DAYS = 1;
 
 export const HTTP_STATUS = {
   NOT_FOUND: 404,
@@ -91,6 +91,8 @@ export const UI_STRINGS = {
   EMAIL_ADDRESS_HELPER: "Enter only the local part (before @)",
   PASSWORD_LABEL: "Password",
   PASSWORD_PLACEHOLDER: "Leave empty for random password",
+  PASSWORD_HELPER:
+    "You can leave the password empty, this will only be used by the extension to access the email via the API.",
   DOMAIN_LABEL: "Domain",
 
   // Toast messages (additional)
@@ -116,6 +118,7 @@ export const UI_STRINGS = {
   NO_SUBJECT: "(No Subject)",
 
   // Date formatting
+  EXPIRES_IN_HOURS: (hours: number) => `Expires in ${hours}h`,
   EXPIRES_TODAY: "Expires today",
   EXPIRES_TOMORROW: "Expires tomorrow",
   EXPIRES_IN_DAYS: (days: number) => `Expires in ${days} days`,

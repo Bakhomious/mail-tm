@@ -7,7 +7,7 @@ Generate and manage temporary email addresses directly from Raycast using the fr
 - **Quick Generate**: Instantly create temporary emails with user-friendly random addresses
 - **Customize**: Create emails with custom address, password, and domain selection
 - **Inbox Viewer**: Read your temporary emails directly in Raycast
-- **Local Storage**: Saved emails persist with automatic expiration after 7 days
+- **Local Storage**: Saved emails persist with automatic expiration after 1 day
 - **Secure**: Passwords are masked by default with secure copy actions
 - **Clean UI**: Organized interface with keyboard shortcuts for all actions
 

@@ -1,16 +1,13 @@
-# Changelog
+# Mail.tm Changelog
 
-All notable changes to this extension will be documented in this file.
+## [Initial Release] - {PR_MERGE_DATE}
 
-## [1.0.0] - Initial Release
-
-### Added
 - Quick generate temporary email with user-friendly random addresses
 - Customize email with custom address, password, and domain selection
 - View and manage saved temporary emails
 - Email inbox viewer with message list
 - Message detail view with full email content
-- Local storage with automatic expiration cleanup (7 days)
+- Local storage with automatic expiration cleanup (1 day)
 - Password masking with secure copy action
 - API integration with Mail.tm service
 - 429 rate limit error handling

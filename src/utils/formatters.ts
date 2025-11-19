@@ -1,9 +1,13 @@
 import { TIME, UI_STRINGS } from "../constants";
 
 export function formatExpiryDate(expiresAt: number): string {
-  const days = Math.floor((expiresAt - Date.now()) / TIME.MILLISECONDS_IN_DAY);
-  if (days === 0) return UI_STRINGS.EXPIRES_TODAY;
-  if (days === 1) return UI_STRINGS.EXPIRES_TOMORROW;
+  const timeRemaining = expiresAt - Date.now();
+  const hours = Math.floor(timeRemaining / TIME.MILLISECONDS_IN_HOUR);
+  const days = Math.floor(timeRemaining / TIME.MILLISECONDS_IN_DAY);
+
+  if (hours <= 24) {
+    return UI_STRINGS.EXPIRES_IN_HOURS(Math.max(0, hours));
+  }
   return UI_STRINGS.EXPIRES_IN_DAYS(days);
 }
 

@@ -82,11 +82,6 @@ export function CustomizeEmailForm() {
         placeholder={UI_STRINGS.EMAIL_ADDRESS_PLACEHOLDER}
         info={UI_STRINGS.EMAIL_ADDRESS_HELPER}
       />
-      <Form.TextField
-        id="customPassword"
-        title={UI_STRINGS.PASSWORD_LABEL}
-        placeholder={UI_STRINGS.PASSWORD_PLACEHOLDER}
-      />
       {domains.length > 1 ? (
         <Form.Dropdown id="customDomain" title={UI_STRINGS.DOMAIN_LABEL} defaultValue={domains[0]}>
           {domains.map((domain) => (
@@ -96,6 +91,12 @@ export function CustomizeEmailForm() {
       ) : domains.length === 1 ? (
         <Form.Description text={`${UI_STRINGS.DOMAIN_PREFIX}${domains[0]}`} />
       ) : null}
+      <Form.PasswordField
+        id="customPassword"
+        title={UI_STRINGS.PASSWORD_LABEL}
+        placeholder={UI_STRINGS.PASSWORD_PLACEHOLDER}
+        info={UI_STRINGS.PASSWORD_HELPER}
+      />
     </Form>
   );
 }
